@@ -6,7 +6,7 @@
 
   <nav class="nav-links">
     <ul>
-      <li><a href="#">الرئيسية</a></li>
+      <li><a href="/">الرئيسية</a></li>
       <li><a href="#">النساء</a></li>
       <li><a href="#">الرجال</a></li>
       <li><a href="#">الأطفال</a></li>
@@ -19,9 +19,15 @@
     <a href="#" class="icon">🛒</a>
     <a href="#" class="icon">👤</a>
 
-    <!-- 🌟 أزرار الدخول والتسجيل -->
-    <a href="{% url 'login' %}" class="btn-auth">تسجيل الدخول</a>
-    <a href="{% url 'register' %}" class="btn-register">إنشاء حساب</a>
+    {% if user.is_authenticated %}
+      <!-- ✅ إذا كان المستخدم مسجل الدخول -->
+      <span class="welcome-text">👋 مرحبًا {{ user.username }}</span>
+      <a href="{% url 'logout' %}" class="btn-logout">تسجيل الخروج</a>
+    {% else %}
+      <!-- 🚪 إذا لم يكن مسجل -->
+      <a href="{% url 'login' %}" class="btn-auth">تسجيل الدخول</a>
+      <a href="{% url 'register' %}" class="btn-register">إنشاء حساب</a>
+    {% endif %}
   </div>
 </header>
 
@@ -45,6 +51,7 @@
   letter-spacing: 1px;
 }
 
+/* 🔗 روابط التنقل */
 .nav-links ul {
   display: flex;
   gap: 1.5rem;
@@ -63,6 +70,7 @@
   color: #f5c542;
 }
 
+/* 🛒 أيقونات */
 .icons .icon {
   margin-left: 1rem;
   font-size: 1.3rem;
@@ -74,17 +82,30 @@
   color: #f5c542;
 }
 
-/* 🎨 أزرار التسجيل والدخول */
+/* 💬 ترحيب المستخدم */
+.welcome-text {
+  margin-left: 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #f5c542;
+}
+
+/* 🎨 أزرار الدخول والتسجيل والخروج */
 .btn-auth,
-.btn-register {
+.btn-register,
+.btn-logout {
   margin-left: 1rem;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   text-decoration: none;
-  color: #fff;
   font-weight: bold;
   transition: 0.3s ease;
   border: 1px solid #f5c542;
+}
+
+/* تسجيل الدخول */
+.btn-auth {
+  color: #fff;
 }
 
 .btn-auth:hover {
@@ -92,6 +113,7 @@
   color: #152238;
 }
 
+/* إنشاء حساب */
 .btn-register {
   background-color: #f5c542;
   color: #152238;
@@ -100,5 +122,17 @@
 .btn-register:hover {
   background-color: #fff;
   color: #800020;
+}
+
+/* تسجيل الخروج */
+.btn-logout {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #f5c542;
+}
+
+.btn-logout:hover {
+  background-color: #f5c542;
+  color: #152238;
 }
 </style>
