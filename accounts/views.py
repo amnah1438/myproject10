@@ -1,154 +1,108 @@
-<!-- /Users/amnah/myproject10/templates/home.html -->
-{% include 'header.html' %}
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django import forms
 
-<main class="main-section">
-  <!-- ✅ ترحيب بالمستخدم الحالي -->
-  {% if user.is_authenticated %}
-  <section class="welcome">
-    <h2>👋 أهلًا {{ user.username }}! سعيدون بعودتك إلى Fashion Élite 💖</h2>
-    <a href="{% url 'logout' %}" class="logout-btn">تسجيل الخروج</a>
-  </section>
-  {% endif %}
 
-  <!-- ✨ قسم البداية -->
-  <section class="hero">
-    <h2>أناقتك تبدأ من هنا 👗</h2>
-    <p>تسوق أحدث مجموعات الأزياء بلمسة من الفخامة والأناقة.</p>
-    <button class="shop-btn">ابدأ التسوق الآن</button>
-  </section>
+# ==============================
+# 🧾 نموذج إنشاء حساب جديد (Register Form)
+# ==============================
+class RegisterForm(forms.ModelForm):
+    password = forms.CharField(
+        label="كلمة المرور",
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'أدخل كلمة المرور'
+        })
+    )
+    password_confirm = forms.CharField(
+        label="تأكيد كلمة المرور",
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'أدخل تأكيد كلمة المرور'
+        })
+    )
 
-  <!-- 👗 المنتجات المميزة -->
-  <section class="featured">
-    <h3>🩵 منتجات مميزة 🩵</h3>
-    <div class="products">
-      <div class="product-card">
-        <img src="https://via.placeholder.com/200" alt="فستان">
-        <h4>فستان سهرة</h4>
-        <p>299 ر.س</p>
-      </div>
-      <div class="product-card">
-        <img src="https://via.placeholder.com/200" alt="بدلة رجالية">
-        <h4>بدلة كلاسيكية</h4>
-        <p>499 ر.س</p>
-      </div>
-      <div class="product-card">
-        <img src="https://via.placeholder.com/200" alt="أزياء أطفال">
-        <h4>طقم أطفال</h4>
-        <p>199 ر.س</p>
-      </div>
-    </div>
-  </section>
-</main>
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+        labels = {
+            'username': 'اسم المستخدم',
+            'email': 'البريد الإلكتروني',
+        }
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'اسم المستخدم'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'البريد الإلكتروني'
+            }),
+        }
 
-{% include 'footer.html' %}
+    def clean(self):
+        """التحقق من تطابق كلمتي المرور"""
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password_confirm = cleaned_data.get('password_confirm')
 
-<style>
-/* 🎨 التنسيق العام */
-body {
-  margin: 0;
-  font-family: "Cairo", sans-serif;
-  background-color: #f7f7f7;
-  color: #152238;
-}
+        if password != password_confirm:
+            raise forms.ValidationError("⚠️ كلمتا المرور غير متطابقتين.")
+        return cleaned_data
 
-/* 👋 الترحيب بالمستخدم */
-.welcome {
-  text-align: center;
-  background-color: #fdf4ea;
-  padding: 1.5rem;
-  border-bottom: 2px solid #f5c542;
-}
 
-.welcome h2 {
-  font-size: 1.5rem;
-  color: #152238;
-}
+# ==============================
+# 🧩 إنشاء حساب جديد (Register View)
+# ==============================
+def register_view(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            messages.success(request, "✅ تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.")
+            return redirect('login')
+        else:
+            messages.error(request, "⚠️ حدث خطأ في البيانات، يرجى التحقق.")
+    else:
+        form = RegisterForm()
 
-.logout-btn {
-  display: inline-block;
-  margin-top: 0.8rem;
-  background: #800020;
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem 1.5rem;
-  border-radius: 25px;
-  transition: 0.3s;
-}
+    return render(request, 'accounts-templates/register.html', {'form': form})
 
-.logout-btn:hover {
-  background: #f5c542;
-  color: #152238;
-}
 
-/* ✨ قسم البداية */
-.hero {
-  text-align: center;
-  padding: 4rem 1rem;
-  background: linear-gradient(120deg, #152238, #800020);
-  color: #fff;
-}
+# ==============================
+# 🔐 تسجيل الدخول (Login View)
+# ==============================
+def login_view(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
 
-.hero h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
+            if user is not None:
+                login(request, user)
+                messages.success(request, f"👋 مرحبًا {username}! تم تسجيل الدخول بنجاح.")
+                return redirect('/')
+            else:
+                messages.error(request, "❌ اسم المستخدم أو كلمة المرور غير صحيحة.")
+        else:
+            messages.error(request, "⚠️ تحقق من البيانات المدخلة.")
+    else:
+        form = AuthenticationForm()
 
-.hero p {
-  font-size: 1.2rem;
-}
+    return render(request, 'accounts-templates/login.html', {'form': form})
 
-.shop-btn {
-  margin-top: 1.5rem;
-  background: #f5c542;
-  color: #152238;
-  border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 25px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
 
-.shop-btn:hover {
-  background: #fff;
-  color: #800020;
-}
-
-/* 👗 المنتجات المميزة */
-.featured {
-  text-align: center;
-  padding: 3rem 1rem;
-}
-
-.products {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-top: 2rem;
-}
-
-.product-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  width: 220px;
-  padding: 1rem;
-  transition: transform 0.3s;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-}
-
-.product-card img {
-  width: 100%;
-  border-radius: 8px;
-}
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  console.log("✅ Fashion Élite Home Loaded with user session.");
-});
-</script>
+# ==============================
+# 🚪 تسجيل الخروج (Logout View)
+# ==============================
+def logout_view(request):
+    logout(request)
+    messages.info(request, "👋 تم تسجيل الخروج بنجاح.")
+    return redirect('login')
