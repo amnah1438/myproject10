@@ -15,3 +15,10 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'category__name')
     ordering = ('-created_at',)
     list_per_page = 15
+
+
+
+
+
+
+    
