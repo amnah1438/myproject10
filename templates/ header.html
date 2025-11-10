@@ -3,6 +3,7 @@
   <div class="logo">
     <h1>✨ Fashion Élite ✨</h1>
   </div>
+
   <nav class="nav-links">
     <ul>
       <li><a href="#">الرئيسية</a></li>
@@ -13,9 +14,14 @@
       <li><a href="#">تواصل معنا</a></li>
     </ul>
   </nav>
+
   <div class="icons">
     <a href="#" class="icon">🛒</a>
     <a href="#" class="icon">👤</a>
+
+    <!-- 🌟 أزرار الدخول والتسجيل -->
+    <a href="{% url 'login' %}" class="btn-auth">تسجيل الدخول</a>
+    <a href="{% url 'register' %}" class="btn-register">إنشاء حساب</a>
   </div>
 </header>
 
@@ -66,5 +72,33 @@
 
 .icons .icon:hover {
   color: #f5c542;
+}
+
+/* 🎨 أزرار التسجيل والدخول */
+.btn-auth,
+.btn-register {
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  transition: 0.3s ease;
+  border: 1px solid #f5c542;
+}
+
+.btn-auth:hover {
+  background-color: #f5c542;
+  color: #152238;
+}
+
+.btn-register {
+  background-color: #f5c542;
+  color: #152238;
+}
+
+.btn-register:hover {
+  background-color: #fff;
+  color: #800020;
 }
 </style>
