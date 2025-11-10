@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 def home(request):
-    return HttpResponse("<h1>مرحبًا بكِ في الصفحة الرئيسية للمتجر الإلكتروني 🛍️</h1>")
+    return render(request, 'home.html')
