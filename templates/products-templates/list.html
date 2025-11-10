@@ -3,14 +3,14 @@
 
 <main class="main-section">
 
-  <!-- 🦋 القسم الترحيبي (البنر الرئيسي) -->
+  <!-- 🦋 البنر الترحيبي الخاص بصفحة المنتجات -->
   <section class="hero">
-    <h2>تألّق بإطلالة فريدة ✨</h2>
-    <p>اكتشف تشكيلتنا المميزة من الأزياء العصرية بأسعار تنافسية.</p>
-    <button class="shop-btn" onclick="scrollToProducts()">استعرض المنتجات الآن</button>
+    <h2>تسوق بأناقة وذوق رفيع ✨</h2>
+    <p>اكتشف تشكيلتنا الواسعة من الأزياء والإكسسوارات العصرية.</p>
+    <button class="shop-btn" onclick="scrollToProducts()">ابدأ التسوق الآن</button>
   </section>
 
-  <!-- 🛍️ قسم عرض المنتجات الفعلي -->
+  <!-- 🛍️ هنا تُعرض المنتجات الحقيقية من القالب المخصص -->
   <section id="products-section">
     {% include 'products/list.html' %}
   </section>
@@ -20,21 +20,20 @@
 {% include 'footer.html' %}
 
 <style>
-/* 🎨 التنسيق العام */
+/* 🎨 تنسيق صفحة المنتجات */
 body {
   margin: 0;
   font-family: "Cairo", sans-serif;
-  background-color: #f7f7f7;
+  background-color: #f8f8f8;
   color: #152238;
 }
 
-/* ✨ البنر الرئيسي */
+/* 🩵 البنر */
 .hero {
   text-align: center;
   padding: 4rem 1rem;
   background: linear-gradient(120deg, #152238, #800020);
   color: #fff;
-  position: relative;
 }
 
 .hero h2 {
@@ -45,7 +44,7 @@ body {
 
 .hero p {
   font-size: 1.2rem;
-  animation: fadeIn 1.2s ease;
+  animation: fadeIn 1.3s ease;
 }
 
 .shop-btn {
@@ -66,12 +65,12 @@ body {
   transform: scale(1.05);
 }
 
-/* 💎 قسم المنتجات المستدعى */
+/* 💎 قسم المنتجات */
 #products-section {
   margin-top: 3rem;
   padding: 2rem 5%;
-  background-color: #fafafa;
-  border-top: 2px solid #eee;
+  background-color: #fff;
+  border-top: 3px solid #eee;
 }
 
 /* ✨ الحركات */
@@ -85,13 +84,13 @@ body {
   to { opacity: 1; }
 }
 
-/* ⚙️ تجاوب مع الشاشات الصغيرة */
+/* 📱 تجاوب */
 @media (max-width: 768px) {
   .hero h2 {
     font-size: 2rem;
   }
   .shop-btn {
-    padding: 0.7rem 1.5rem;
+    padding: 0.7rem 1.4rem;
   }
 }
 </style>
@@ -99,10 +98,10 @@ body {
 <script>
 /* 💫 تأثيرات وتحريك الصفحة */
 document.addEventListener('DOMContentLoaded', () => {
-  console.log("🛒 صفحة المنتجات تم تحميلها بنجاح!");
+  console.log("🛍️ صفحة المنتجات تم تحميلها بنجاح!");
 });
 
-/* 🔽 التمرير إلى قسم المنتجات عند الضغط على الزر */
+/* 🔽 تمرير ناعم لقسم المنتجات */
 function scrollToProducts() {
   const section = document.getElementById("products-section");
   section.scrollIntoView({ behavior: "smooth" });
