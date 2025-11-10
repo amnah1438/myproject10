@@ -23,7 +23,7 @@ ALLOWED_HOSTS = []
 # 🧩 التطبيقات المثبتة
 # ==============================
 INSTALLED_APPS = [
-    # تطبيقات Django الافتراضية
+    # 🧰 تطبيقات Django الأساسية
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -31,14 +31,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # ==============================
     # 🌐 التطبيق الرئيسي للمتجر
-    # ==============================
     'core',         # 🏠 الصفحات العامة والإعدادات العامة للمتجر
 
-    # ==============================
     # 🧱 تطبيقات المتجر الإلكترونية
-    # ==============================
     'accounts',     # 👥 إدارة المستخدمين والعملاء
     'products',     # 🛍️ إدارة المنتجات والمخزون
     'orders',       # 🧾 إدارة الطلبات والسلة والدفع
@@ -68,7 +64,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
 
-        # 👇 هنا تم تعريف مجلد القوالب العام بشكل صحيح
+        # 📁 مجلد القوالب العام
         'DIRS': [BASE_DIR / 'templates'],
 
         'APP_DIRS': True,
@@ -101,18 +97,10 @@ DATABASES = {
 # 🔒 إعدادات كلمات المرور
 # ==============================
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 
@@ -130,20 +118,18 @@ USE_TZ = True                   # تفعيل المنطقة الزمنية
 # 🖼️ الملفات الثابتة (Static Files)
 # ==============================
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]  # ملفات التصميم العامة
+STATIC_ROOT = BASE_DIR / "staticfiles"    # مكان تجميع الملفات عند النشر (collectstatic)
 
-# 👇 مجلد ثابت خاص بالمشروع
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
 
 # ==============================
 # 🧾 الملفات المرفوعة (Media Files)
 # ==============================
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / 'media'           # مكان تخزين الملفات المرفوعة (صور/شعارات/منتجات)
 
 
 # ==============================
-# 🧾 الإعداد الافتراضي لمفاتيح قاعدة البيانات
+# ⚙️ الإعداد الافتراضي لمفاتيح قاعدة البيانات
 # ==============================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
