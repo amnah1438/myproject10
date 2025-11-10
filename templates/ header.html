@@ -1,4 +1,3 @@
-<!-- /Users/amnah/myproject10/templates/header.html -->
 <header class="navbar">
   <div class="logo">
     <h1>✨ Fashion Élite ✨</h1>
@@ -17,14 +16,13 @@
 
   <div class="icons">
     <a href="#" class="icon">🛒</a>
-    <a href="#" class="icon">👤</a>
 
     {% if user.is_authenticated %}
-      <!-- ✅ إذا كان المستخدم مسجل الدخول -->
-      <span class="welcome-text">👋 مرحبًا {{ user.username }}</span>
+      <!-- ✅ المستخدم مسجل دخول -->
+      <span class="welcome">👋 مرحبًا، {{ user.username }}</span>
       <a href="{% url 'logout' %}" class="btn-logout">تسجيل الخروج</a>
     {% else %}
-      <!-- 🚪 إذا لم يكن مسجل -->
+      <!-- 🚪 المستخدم غير مسجل دخول -->
       <a href="{% url 'login' %}" class="btn-auth">تسجيل الدخول</a>
       <a href="{% url 'register' %}" class="btn-register">إنشاء حساب</a>
     {% endif %}
@@ -51,7 +49,6 @@
   letter-spacing: 1px;
 }
 
-/* 🔗 روابط التنقل */
 .nav-links ul {
   display: flex;
   gap: 1.5rem;
@@ -70,7 +67,11 @@
   color: #f5c542;
 }
 
-/* 🛒 أيقونات */
+.icons {
+  display: flex;
+  align-items: center;
+}
+
 .icons .icon {
   margin-left: 1rem;
   font-size: 1.3rem;
@@ -82,15 +83,7 @@
   color: #f5c542;
 }
 
-/* 💬 ترحيب المستخدم */
-.welcome-text {
-  margin-left: 1rem;
-  font-weight: 600;
-  font-size: 1rem;
-  color: #f5c542;
-}
-
-/* 🎨 أزرار الدخول والتسجيل والخروج */
+/* 🎨 أزرار التسجيل والدخول */
 .btn-auth,
 .btn-register,
 .btn-logout {
@@ -103,7 +96,6 @@
   border: 1px solid #f5c542;
 }
 
-/* تسجيل الدخول */
 .btn-auth {
   color: #fff;
 }
@@ -113,7 +105,6 @@
   color: #152238;
 }
 
-/* إنشاء حساب */
 .btn-register {
   background-color: #f5c542;
   color: #152238;
@@ -124,15 +115,21 @@
   color: #800020;
 }
 
-/* تسجيل الخروج */
+/* 🚪 زر تسجيل الخروج */
 .btn-logout {
-  background-color: transparent;
-  color: #fff;
-  border: 1px solid #f5c542;
+  background-color: #f5c542;
+  color: #152238;
 }
 
 .btn-logout:hover {
-  background-color: #f5c542;
-  color: #152238;
+  background-color: #fff;
+  color: #800020;
+}
+
+/* 👋 رسالة الترحيب */
+.welcome {
+  margin-left: 1rem;
+  font-weight: 500;
+  color: #f5c542;
 }
 </style>
