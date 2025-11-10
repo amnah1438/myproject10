@@ -1,0 +1,37 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+*.egg-info/
+.eggs/
+.envrc
+
+# Virtualenv
+venv/
+.env/
+.venv/
+
+# IDE/Editors
+.vscode/
+.idea/
+
+# Django
+staticfiles/
+media/
+*.log
+db.sqlite3
+# لو تبين تبقين قاعدة البيانات في Git احذفي السطر أعلاه
+
+# Migrations cache (نحتفظ بملفات الهجرات نفسها)
+*.pot
+*.pyc
+
+# Coverage / pytest
+.coverage
+htmlcov/
+.pytest_cache/
