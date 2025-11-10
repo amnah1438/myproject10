@@ -1,0 +1,116 @@
+<!-- /Users/amnah/myproject10/templates/home.html -->
+{% include 'header.html' %}
+
+<main class="main-section">
+  <section class="hero">
+    <h2>أناقتك تبدأ من هنا 👗</h2>
+    <p>تسوق أحدث مجموعات الأزياء بلمسة من الفخامة والأناقة.</p>
+    <button class="shop-btn">ابدأ التسوق الآن</button>
+  </section>
+
+  <section class="featured">
+    <h3>🩵 منتجات مميزة 🩵</h3>
+    <div class="products">
+      <div class="product-card">
+        <img src="https://via.placeholder.com/200" alt="فستان">
+        <h4>فستان سهرة</h4>
+        <p>299 ر.س</p>
+      </div>
+      <div class="product-card">
+        <img src="https://via.placeholder.com/200" alt="بدلة رجالية">
+        <h4>بدلة كلاسيكية</h4>
+        <p>499 ر.س</p>
+      </div>
+      <div class="product-card">
+        <img src="https://via.placeholder.com/200" alt="أزياء أطفال">
+        <h4>طقم أطفال</h4>
+        <p>199 ر.س</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% include 'footer.html' %}
+
+<style>
+/* 🎨 التنسيق العام للصفحة الرئيسية */
+body {
+  margin: 0;
+  font-family: "Cairo", sans-serif;
+  background-color: #f7f7f7;
+  color: #152238;
+}
+
+/* ✨ قسم البداية */
+.hero {
+  text-align: center;
+  padding: 4rem 1rem;
+  background: linear-gradient(120deg, #152238, #800020);
+  color: #fff;
+}
+
+.hero h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+}
+
+.shop-btn {
+  margin-top: 1.5rem;
+  background: #f5c542;
+  color: #152238;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.shop-btn:hover {
+  background: #fff;
+  color: #800020;
+}
+
+/* 👗 المنتجات المميزة */
+.featured {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.products {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  width: 220px;
+  padding: 1rem;
+  transition: transform 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+</style>
+
+<script>
+/* 💫 تأثيرات بسيطة */
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("Fashion Élite Store Loaded ✨");
+});
+</script>
