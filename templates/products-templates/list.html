@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>قائمة المنتجات</h1>
+
+<div class="products">
+    {% for product in products %}
+        <div class="product">
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            <p><strong>السعر:</strong> {{ product.price }} ريال</p>
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200">
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>لا توجد منتجات حالياً.</p>
+    {% endfor %}
+</div>
+{% endblock %}
