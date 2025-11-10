@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>إنشاء حساب جديد</title>
+</head>
+<body dir="rtl">
+    <h2>📝 إنشاء حساب جديد</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">تسجيل</button>
+    </form>
+
+    <p>هل لديك حساب بالفعل؟ <a href="{% url 'login' %}">تسجيل الدخول</a></p>
+
+    {% for message in messages %}
+        <p style="color: green;">{{ message }}</p>
+    {% endfor %}
+</body>
+</html>
