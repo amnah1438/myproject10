@@ -1,0 +1,70 @@
+<!-- /Users/amnah/myproject10/templates/header.html -->
+<header class="navbar">
+  <div class="logo">
+    <h1>✨ Fashion Élite ✨</h1>
+  </div>
+  <nav class="nav-links">
+    <ul>
+      <li><a href="#">الرئيسية</a></li>
+      <li><a href="#">النساء</a></li>
+      <li><a href="#">الرجال</a></li>
+      <li><a href="#">الأطفال</a></li>
+      <li><a href="#">العروض</a></li>
+      <li><a href="#">تواصل معنا</a></li>
+    </ul>
+  </nav>
+  <div class="icons">
+    <a href="#" class="icon">🛒</a>
+    <a href="#" class="icon">👤</a>
+  </div>
+</header>
+
+<style>
+/* 🎨 الشريط العلوي */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to right, #152238, #800020);
+  padding: 1rem 2rem;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo h1 {
+  font-family: "Cairo", sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
+.nav-links ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #f5c542;
+}
+
+.icons .icon {
+  margin-left: 1rem;
+  font-size: 1.3rem;
+  text-decoration: none;
+  color: #fff;
+}
+
+.icons .icon:hover {
+  color: #f5c542;
+}
+</style>
