@@ -1,19 +1,196 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>قائمة المنتجات</h1>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>قائمة المنتجات</title>
 
-<div class="products">
-    {% for product in products %}
-        <div class="product">
-            <h2>{{ product.name }}</h2>
-            <p>{{ product.description }}</p>
-            <p><strong>السعر:</strong> {{ product.price }} ريال</p>
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200">
-            {% endif %}
+    <style>
+        /* 🎨 الأسلوب العام */
+        body {
+            font-family: "Cairo", sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 15px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        /* 🛍️ شبكة المنتجات */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-info h2 {
+            font-size: 18px;
+            color: #007bff;
+            margin-bottom: 8px;
+        }
+
+        .product-info p {
+            color: #555;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            color: #28a745;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .details-btn {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .details-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* 💡 النافذة المنبثقة */
+        .popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .popup-content h3 {
+            color: #007bff;
+        }
+
+        .popup-content p {
+            margin: 10px 0;
+        }
+
+        .close-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🛍️ قائمة المنتجات</h1>
+
+        <div class="products-grid">
+            {% for product in products %}
+                <div class="product-card" onclick="showPopup('{{ product.name }}', '{{ product.description|escapejs }}', '{{ product.price }}', '{% if product.image %}{{ product.image.url }}{% endif %}')">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/250x200?text=No+Image" alt="No Image">
+                    {% endif %}
+                    <div class="product-info">
+                        <h2>{{ product.name }}</h2>
+                        <p>{{ product.description|truncatewords:10 }}</p>
+                        <p class="price">{{ product.price }} ريال</p>
+                        <button class="details-btn">عرض التفاصيل</button>
+                    </div>
+                </div>
+            {% empty %}
+                <p>لا توجد منتجات حالياً.</p>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>لا توجد منتجات حالياً.</p>
-    {% endfor %}
-</div>
+    </div>
+
+    <!-- 💬 نافذة التفاصيل -->
+    <div class="popup" id="productPopup">
+        <div class="popup-content">
+            <h3 id="popupName"></h3>
+            <img id="popupImage" src="" alt="" style="width:100%; border-radius:8px; margin:10px 0;">
+            <p id="popupDescription"></p>
+            <p class="price" id="popupPrice"></p>
+            <button class="close-btn" onclick="closePopup()">إغلاق</button>
+        </div>
+    </div>
+
+    <script>
+        // 🧠 دالة فتح النافذة المنبثقة
+        function showPopup(name, description, price, imageUrl) {
+            document.getElementById("popupName").innerText = name;
+            document.getElementById("popupDescription").innerText = description;
+            document.getElementById("popupPrice").innerText = "السعر: " + price + " ريال";
+            document.getElementById("popupImage").src = imageUrl || "https://via.placeholder.com/400x300?text=No+Image";
+
+            document.getElementById("productPopup").style.display = "flex";
+        }
+
+        // 🔒 دالة إغلاق النافذة
+        function closePopup() {
+            document.getElementById("productPopup").style.display = "none";
+        }
+    </script>
+</body>
+</html>
 {% endblock %}
