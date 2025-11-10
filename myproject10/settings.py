@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     # ==============================
     # 🌐 التطبيق الرئيسي للمتجر
     # ==============================
-    'core',         # 🏠 الصفحة الرئيسية والصفحات العامة
+    'core',         # 🏠 الصفحات العامة والإعدادات العامة للمتجر
 
     # ==============================
     # 🧱 تطبيقات المتجر الإلكترونية
@@ -60,17 +60,21 @@ MIDDLEWARE = [
 
 
 # ==============================
-# 🌐 إعدادات الروابط والقوالب
+# 🌐 إعدادات الروابط والقوالب (Templates)
 # ==============================
 ROOT_URLCONF = 'myproject10.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # مجلد القوالب العامة
+
+        # 👇 هنا تم تعريف مجلد القوالب العام بشكل صحيح
+        'DIRS': [BASE_DIR / 'templates'],
+
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -123,10 +127,20 @@ USE_TZ = True                   # تفعيل المنطقة الزمنية
 
 
 # ==============================
-# 🖼️ الملفات الثابتة
+# 🖼️ الملفات الثابتة (Static Files)
 # ==============================
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_URL = '/static/'
+
+# 👇 مجلد ثابت خاص بالمشروع
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+# ==============================
+# 🧾 الملفات المرفوعة (Media Files)
+# ==============================
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # ==============================
