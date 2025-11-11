@@ -10,9 +10,22 @@
     <button class="shop-btn" onclick="scrollToProducts()">ابدأ التسوق الآن</button>
   </section>
 
-  <!-- 🛍️ هنا تُعرض المنتجات الحقيقية من القالب المخصص -->
-  <section id="products-section">
-    {% include 'products/list.html' %}
+  <!-- 🛍️ عرض المنتجات مباشرة هنا -->
+  <section id="products-section" class="products-grid">
+    {% for product in products %}
+      <div class="product-card">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+          <img src="https://via.placeholder.com/250x200?text=No+Image" alt="No Image">
+        {% endif %}
+        <h3>{{ product.name }}</h3>
+        <p class="desc">{{ product.description|truncatewords:10 }}</p>
+        <p class="price">{{ product.price }} ر.س</p>
+      </div>
+    {% empty %}
+      <p>لا توجد منتجات حالياً.</p>
+    {% endfor %}
   </section>
 
 </main>
@@ -65,12 +78,42 @@ body {
   transform: scale(1.05);
 }
 
-/* 💎 قسم المنتجات */
-#products-section {
+/* 💎 المنتجات */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 25px;
   margin-top: 3rem;
   padding: 2rem 5%;
   background-color: #fff;
   border-top: 3px solid #eee;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+.product-card:hover {
+  transform: translateY(-5px);
+}
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.product-card h3 {
+  font-size: 18px;
+  color: #152238;
+  margin: 10px 0 5px;
+}
+.product-card .price {
+  color: #800020;
+  font-weight: bold;
 }
 
 /* ✨ الحركات */
