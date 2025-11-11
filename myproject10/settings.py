@@ -1,7 +1,9 @@
 from pathlib import Path
+import os
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from django.core.management.utils import get_random_secret_key
 
 # ==============================
 # 📁 المسار الأساسي للمشروع
@@ -9,21 +11,20 @@ import cloudinary.api
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ==============================
-# 🔐 المفتاح السري للمشروع
+# 🔐 المفتاح السري
 # ==============================
-SECRET_KEY = 'django-insecure-6$2z-1!q4vyti7lq++$m^r-p$_y5k%=b11-z+76s29&1(mp9ve'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # ==============================
-# ⚙️ إعدادات التصحيح والاستضافة
+# ⚙️ وضع التصحيح والاستضافة
 # ==============================
-DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".onrender.com"]
 
 # ==============================
-# 🧩 التطبيقات المثبتة
+# 🧩 التطبيقات
 # ==============================
 INSTALLED_APPS = [
-    # 🧰 تطبيقات Django الأساسية
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -31,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 🌐 تطبيقات المتجر
+    # 🌐 تطبيقات المشروع
     'core',
     'accounts',
     'products',
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
 ]
 
 # ==============================
-# 🧱 الوسائط (Middleware)
+# 🧱 الوسطاء
 # ==============================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,7 +57,7 @@ MIDDLEWARE = [
 ]
 
 # ==============================
-# 🌐 إعداد القوالب
+# 🌐 القوالب
 # ==============================
 ROOT_URLCONF = 'myproject10.urls'
 
@@ -81,12 +82,26 @@ WSGI_APPLICATION = 'myproject10.wsgi.application'
 # ==============================
 # 🗃️ قاعدة البيانات
 # ==============================
+# ⚙️ إعداد قاعدة التطوير (SQLite)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# ⚙️ إعداد قاعدة الإنتاج (PostgreSQL)
+if os.getenv("DJANGO_ENV") == "production":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'HOST': 'dpg-d49lo93e5dus73cqfp20-a',
+            'PORT': '5432',
+            'NAME': 'db_myproject10',
+            'USER': 'db_myproject10_user',
+            'PASSWORD': '7BTGjAyNu7diRi9WilNYV48eFeGwoL2M',
+        }
+    }
 
 # ==============================
 # 🔒 إعداد كلمات المرور
@@ -107,30 +122,21 @@ USE_I18N = True
 USE_TZ = True
 
 # ==============================
-# 🖼️ الملفات الثابتة (Static)
+# 🖼️ الملفات الثابتة والميديا
 # ==============================
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# ==============================
-# ☁️ إعداد Cloudinary كمخزن للميديا
-# ==============================
 cloudinary.config(
-    cloud_name="dyg4401o9",          # 👈 اسم حسابك في Cloudinary
-    api_key="283452178212273",       # 👈 المفتاح الخاص بك
-    api_secret="hRYpVPeOwKcCDSruJ9Um_56WdVw",  # 👈 الرمز السري
+    cloud_name="dyg4401o9",
+    api_key="283452178212273",
+    api_secret="hRYpVPeOwKcCDSruJ9Um_56WdVw",
     secure=True
 )
 
-# ✅ جعل Cloudinary هو المخزن الافتراضي للملفات المرفوعة
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# 🧾 مسار الميديا (للدعم فقط، لا يتم التخزين محليًا)
 MEDIA_URL = '/media/'
-
-# ❌ لا يوجد MEDIA_ROOT لأن Cloudinary يتولى التخزين السحابي
-# (إزالة هذا السطر مهم جدًا حتى لا يحفظ Django محليًا)
 
 # ==============================
 # ⚙️ الإعداد الافتراضي للمفاتيح
