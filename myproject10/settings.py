@@ -1,9 +1,15 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from django.core.management.utils import get_random_secret_key
+
+# ==============================
+# 📦 تحميل ملف .env
+# ==============================
+load_dotenv()
 
 # ==============================
 # 📁 المسار الأساسي للمشروع
@@ -13,18 +19,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ==============================
 # 🔐 المفتاح السري
 # ==============================
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # ==============================
 # ⚙️ وضع التصحيح والاستضافة
 # ==============================
-DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".onrender.com"]
+DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    ".onrender.com",  # يمكن تعديلها لاحقًا لاسم الدومين الفعلي
+]
 
 # ==============================
-# 🧩 التطبيقات
+# 🧩 التطبيقات المثبتة
 # ==============================
 INSTALLED_APPS = [
+    # 🧰 تطبيقات Django الأساسية
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,7 +55,7 @@ INSTALLED_APPS = [
 ]
 
 # ==============================
-# 🧱 الوسطاء
+# 🧱 الوسطاء (Middleware)
 # ==============================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,26 +91,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'myproject10.wsgi.application'
 
 # ==============================
-# 🗃️ قاعدة البيانات
+# 🗃️ قواعد البيانات
 # ==============================
-# ⚙️ إعداد قاعدة التطوير (SQLite)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# ⚙️ إعداد قاعدة الإنتاج (PostgreSQL)
 if os.getenv("DJANGO_ENV") == "production":
+    # قاعدة بيانات الإنتاج (PostgreSQL)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'HOST': 'dpg-d49lo93e5dus73cqfp20-a',
-            'PORT': '5432',
-            'NAME': 'db_myproject10',
-            'USER': 'db_myproject10_user',
-            'PASSWORD': '7BTGjAyNu7diRi9WilNYV48eFeGwoL2M',
+            'HOST': os.getenv('DB_HOST'),
+            'PORT': os.getenv('DB_PORT'),
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+        }
+    }
+else:
+    # قاعدة بيانات التطوير (SQLite)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
@@ -128,10 +139,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# ☁️ Cloudinary
 cloudinary.config(
-    cloud_name="dyg4401o9",
-    api_key="283452178212273",
-    api_secret="hRYpVPeOwKcCDSruJ9Um_56WdVw",
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
     secure=True
 )
 
