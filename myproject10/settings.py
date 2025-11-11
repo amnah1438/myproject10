@@ -25,19 +25,19 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 # ⚙️ وضع التصحيح والاستضافة
 # ==============================
 DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
+
+# 👇 السماح تلقائي بكل نطاق فرعي من Render + النطاقات المحلية
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "myproject10.onrender.com",
-    "myproject10-1.onrender.com",
+    os.getenv("RENDER_EXTERNAL_HOSTNAME", ""),  # يسمح تلقائيًا بنطاق Render الحالي
+    ".onrender.com",  # لأي نطاق فرعي آخر داخل Render
 ]
-
 
 # ==============================
 # 🧩 التطبيقات المثبتة
 # ==============================
 INSTALLED_APPS = [
-    # 🧰 تطبيقات Django الأساسية
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -96,7 +96,6 @@ WSGI_APPLICATION = 'myproject10.wsgi.application'
 # 🗃️ قواعد البيانات
 # ==============================
 if os.getenv("DJANGO_ENV") == "production":
-    # قاعدة بيانات الإنتاج (PostgreSQL)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -108,7 +107,6 @@ if os.getenv("DJANGO_ENV") == "production":
         }
     }
 else:
-    # قاعدة بيانات التطوير (SQLite)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
