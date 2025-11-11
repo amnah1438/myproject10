@@ -1,6 +1,4 @@
 from pathlib import Path
-import os
-from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -10,14 +8,14 @@ import cloudinary.api
 # ==============================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# تحميل القيم من ملف .env
-load_dotenv(BASE_DIR / ".env")
+# ==============================
+# 🔐 المفتاح السري للمشروع
+# ==============================
+SECRET_KEY = 'django-insecure-6$2z-1!q4vyti7lq++$m^r-p$_y5k%=b11-z+76s29&1(mp9ve'
 
 # ==============================
-# 🔐 الإعدادات السرية
+# ⚙️ إعدادات التصحيح والاستضافة
 # ==============================
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
-
 DEBUG = True
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
@@ -25,6 +23,7 @@ ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # 🧩 التطبيقات المثبتة
 # ==============================
 INSTALLED_APPS = [
+    # 🧰 تطبيقات Django الأساسية
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -32,7 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # تطبيقات المشروع
+    # 🌐 تطبيقات المتجر
     'core',
     'accounts',
     'products',
@@ -56,11 +55,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# ==============================
+# 🌐 إعداد القوالب
+# ==============================
 ROOT_URLCONF = 'myproject10.urls'
 
-# ==============================
-# 🌐 القوالب
-# ==============================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -90,7 +89,7 @@ DATABASES = {
 }
 
 # ==============================
-# 🔒 كلمات المرور
+# 🔒 إعداد كلمات المرور
 # ==============================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -100,7 +99,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # ==============================
-# 🌍 اللغة والمنطقة
+# 🌍 اللغة والمنطقة الزمنية
 # ==============================
 LANGUAGE_CODE = 'ar'
 TIME_ZONE = 'Asia/Riyadh'
@@ -108,23 +107,26 @@ USE_I18N = True
 USE_TZ = True
 
 # ==============================
-# 🖼️ الملفات الثابتة
+# 🖼️ الملفات الثابتة (Static)
 # ==============================
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # ==============================
-# ☁️ إعداد Cloudinary
+# ☁️ إعداد Cloudinary كمخزن للميديا
 # ==============================
-cloudinary.config( 
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+cloudinary.config(
+    cloud_name="dyg4401o9",          # اسم حسابك في Cloudinary
+    api_key="283452178212273",       # المفتاح الخاص بك
+    api_secret="hRYpVPeOwKcCDSruJ9Um_56WdVw",  # الرمز السري
     secure=True
 )
 
+# جعل Cloudinary هو المخزن الافتراضي للملفات المرفوعة
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# مسار الميديا (الافتراضي)
 MEDIA_URL = '/media/'
 
 # ==============================
