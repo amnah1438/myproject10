@@ -1,5 +1,5 @@
 from django.db import models
-
+from cloudinary.models import CloudinaryField  # 👈 أضيفي هذا السطر
 
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="اسم التصنيف")
@@ -22,14 +22,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="السعر")
     stock = models.PositiveIntegerField(verbose_name="الكمية المتاحة")
 
-    # ✅ Cloudinary سيتولى رفع الصورة
-    # ملاحظة: لا حاجة لتغيير الحقل، فقط تأكدي أن إعداد DEFAULT_FILE_STORAGE في settings موجه لـ Cloudinary
-    image = models.ImageField(
-        upload_to="products/",
-        blank=True,
-        null=True,
-        verbose_name="صورة المنتج"
-    )
+    # ✅ الحقل الجديد الذي يرفع مباشرة إلى Cloudinary
+    image = CloudinaryField('صورة المنتج', folder='products')
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاريخ الإضافة")
 
