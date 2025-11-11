@@ -10,31 +10,173 @@
     <button class="shop-btn" onclick="scrollToProducts()">ابدأ التسوق الآن</button>
   </section>
 
-  <!-- 🛍️ عرض المنتجات مباشرة هنا -->
+  <!-- 🛍️ عرض المنتجات -->
   <section id="products-section" class="products-grid">
     {% for product in products %}
       <div class="product-card">
-        {% if product.image %}
-          <!-- ✅ عرض رابط الصورة لمعرفة هل يأتي من Cloudinary -->
-          <p style="font-size:12px; direction:ltr; color:gray;">
-            {{ product.image.url }}
-          </p>
-
-          <!-- ✅ الصورة نفسها -->
-          <img src="{{ product.image.url }}" alt="{{ product.name }}">
-        {% else %}
-          <img src="https://via.placeholder.com/250x200?text=No+Image" alt="No Image">
-        {% endif %}
+        <div class="image-container">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+          {% else %}
+            <img src="https://via.placeholder.com/250x200?text=No+Image" alt="No Image">
+          {% endif %}
+        </div>
 
         <h3>{{ product.name }}</h3>
         <p class="desc">{{ product.description|truncatewords:10 }}</p>
         <p class="price">{{ product.price }} ر.س</p>
       </div>
     {% empty %}
-      <p>لا توجد منتجات حالياً.</p>
+      <p class="no-products">لا توجد منتجات حالياً.</p>
     {% endfor %}
   </section>
 
 </main>
 
 {% include 'footer.html' %}
+
+<!-- 🎨 التنسيق الكامل للصفحة -->
+<style>
+body {
+  margin: 0;
+  font-family: "Cairo", sans-serif;
+  background-color: #f8f8f8;
+  color: #152238;
+}
+
+/* 🩵 البنر الترحيبي */
+.hero {
+  text-align: center;
+  padding: 4rem 1rem;
+  background: linear-gradient(120deg, #152238, #800020);
+  color: #fff;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+}
+
+.hero h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  animation: fadeInDown 1s ease;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  animation: fadeIn 1.3s ease;
+}
+
+.shop-btn {
+  margin-top: 1.5rem;
+  background: #f5c542;
+  color: #152238;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.shop-btn:hover {
+  background: #fff;
+  color: #800020;
+  transform: scale(1.05);
+}
+
+/* 💎 شبكة المنتجات */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
+  margin-top: 3rem;
+  padding: 2rem 5%;
+  background-color: #fff;
+  border-top: 3px solid #eee;
+}
+
+/* 🛒 كرت المنتج */
+.product-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* 📸 الصورة داخل الكرت */
+.image-container {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.image-container img:hover {
+  transform: scale(1.07);
+}
+
+/* 🏷️ النصوص داخل الكرت */
+.product-card h3 {
+  font-size: 18px;
+  color: #152238;
+  margin: 10px 0 5px;
+}
+
+.product-card .desc {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.product-card .price {
+  color: #800020;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* 📱 تجاوب الجوال */
+@media (max-width: 768px) {
+  .hero h2 { font-size: 2rem; }
+  .shop-btn { padding: 0.7rem 1.4rem; }
+  .products-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  .image-container { height: 180px; }
+}
+
+/* ✨ الحركات */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+
+<!-- 💫 سكربت تحريك الصفحة -->
+<script>
+function scrollToProducts() {
+  const section = document.getElementById("products-section");
+  section.scrollIntoView({ behavior: "smooth" });
+}
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("🛍️ صفحة المنتجات تم تحميلها بنجاح!");
+});
+</script>
