@@ -1,18 +1,79 @@
+<!-- ==============================
+📄 /templates/cart-templates/cart_detail.html
+============================== -->
 {% include 'header.html' %}
 
-<main class="cart-page">
+<main class="cart-container">
   <h2>🛒 سلة التسوق</h2>
 
   {% if items %}
-    <ul>
-      {% for item in items %}
-        <li>{{ item.product.name }} × {{ item.quantity }} = {{ item.get_total_price }} ريال</li>
-      {% endfor %}
-    </ul>
-    <h3>الإجمالي: {{ total }} ريال</h3>
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>المنتج</th>
+          <th>السعر</th>
+          <th>الكمية</th>
+          <th>الإجمالي</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.product.price }} ر.س</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.get_total_price }} ر.س</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3 class="total">المجموع الكلي: {{ total }} ر.س</h3>
   {% else %}
-    <p>السلة فارغة.</p>
+    <p class="empty">😔 لا توجد منتجات في السلة حالياً.</p>
   {% endif %}
 </main>
 
 {% include 'footer.html' %}
+
+<style>
+.cart-container {
+  max-width: 800px;
+  margin: 3rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  font-family: "Cairo", sans-serif;
+}
+
+.cart-container h2 {
+  text-align: center;
+  color: #800020;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+
+.cart-table th, .cart-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.total {
+  text-align: right;
+  margin-top: 1.5rem;
+  color: #152238;
+  font-weight: bold;
+}
+
+.empty {
+  text-align: center;
+  color: gray;
+  font-size: 1.1rem;
+}
+</style>
