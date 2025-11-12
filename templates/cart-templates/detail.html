@@ -1,0 +1,18 @@
+{% include 'header.html' %}
+
+<main class="cart-page">
+  <h2>🛒 سلة التسوق</h2>
+
+  {% if items %}
+    <ul>
+      {% for item in items %}
+        <li>{{ item.product.name }} × {{ item.quantity }} = {{ item.get_total_price }} ريال</li>
+      {% endfor %}
+    </ul>
+    <h3>الإجمالي: {{ total }} ريال</h3>
+  {% else %}
+    <p>السلة فارغة.</p>
+  {% endif %}
+</main>
+
+{% include 'footer.html' %}
