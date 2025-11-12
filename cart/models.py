@@ -1,35 +1,47 @@
 # ==============================
-# 🛒 /cart/admin.py
+# 🧱 /cart/models.py
 # ==============================
-from django.contrib import admin
-from .models import CartItem
+from django.db import models
+from products.models import Product
 
 
-@admin.register(CartItem)
-class CartItemAdmin(admin.ModelAdmin):
-    """إدارة عناصر السلة من لوحة الأدمن"""
+class CartItem(models.Model):
+    """🛒 نموذج يمثل عنصر داخل سلة المشتريات"""
 
-    # الأعمدة الظاهرة في القائمة
-    list_display = ("product", "quantity", "session_key", "get_total_price_display")
-
-    # خصائص الفلترة والبحث
-    list_filter = ("product",)
-    search_fields = ("product__name", "session_key")
-
-    # ترتيب السجلات من الأحدث إلى الأقدم
-    ordering = ("-id",)
-
-    # الحقول المقروءة فقط
-    readonly_fields = ("get_total_price_display",)
-
-    # تقسيم الحقول في واجهة التحرير
-    fieldsets = (
-        ("🛍️ بيانات المنتج", {"fields": ("product", "quantity")}),
-        ("💳 بيانات الجلسة", {"fields": ("session_key",)}),
-        ("💰 المجموع الفرعي", {"fields": ("get_total_price_display",)}),
+    # 🔗 المنتج المرتبط بالسلة
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name="المنتج"
     )
 
-    def get_total_price_display(self, obj):
-        """عرض المجموع بصيغة مرتبة"""
-        return f"{obj.get_total_price():,.2f} ريال"
-    get_total_price_display.short_description = "المجموع الفرعي"
+    # 🔢 الكمية المضافة
+    quantity = models.PositiveIntegerField(
+        default=1,
+        verbose_name="الكمية"
+    )
+
+    # 🧩 مفتاح الجلسة لتمييز المستخدم قبل تسجيل الدخول
+    session_key = models.CharField(
+        max_length=255,
+        verbose_name="مفتاح الجلسة"
+    )
+
+    # 🕒 وقت الإضافة (اختياري لكنه مفيد في الأدمن)
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="تاريخ الإضافة"
+    )
+
+    class Meta:
+        verbose_name = "عنصر سلة"
+        verbose_name_plural = "عناصر السلة"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        """عرض جميل لاسم المنتج والكمية"""
+        return f"{self.product.name} × {self.quantity}"
+
+    def get_total_price(self):
+        """💰 حساب المجموع الفرعي لهذا العنصر"""
+        return self.product.price * self.quantity
