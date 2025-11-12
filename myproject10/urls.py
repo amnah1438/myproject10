@@ -24,6 +24,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),  # 👥 إدارة المستخدمين والعملاء
     path('products/', include('products.urls')),  # 🛍️ إدارة المنتجات والمخزون
     path('orders/', include('orders.urls')),      # 🧾 إدارة الطلبات والسلة والدفع
+path('cart/', include('cart.urls')),  # 🛒 إدارة السلة
+
 ]
 
 
