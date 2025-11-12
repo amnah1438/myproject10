@@ -1,19 +1,35 @@
 # ==============================
-# 🧱 /cart/models.py
+# 🛒 /cart/admin.py
 # ==============================
-from django.db import models
-from products.models import Product
+from django.contrib import admin
+from .models import CartItem
 
 
-class CartItem(models.Model):
-    """نموذج عنصر السلة"""
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="المنتج")
-    quantity = models.PositiveIntegerField(default=1, verbose_name="الكمية")
-    session_key = models.CharField(max_length=255, verbose_name="مفتاح الجلسة")
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    """إدارة عناصر السلة من لوحة الأدمن"""
 
-    def __str__(self):
-        return f"{self.product.name} × {self.quantity}"
+    # الأعمدة الظاهرة في القائمة
+    list_display = ("product", "quantity", "session_key", "get_total_price_display")
 
-    def get_total_price(self):
-        """حساب المجموع الفرعي للعنصر"""
-        return self.product.price * self.quantity
+    # خصائص الفلترة والبحث
+    list_filter = ("product",)
+    search_fields = ("product__name", "session_key")
+
+    # ترتيب السجلات من الأحدث إلى الأقدم
+    ordering = ("-id",)
+
+    # الحقول المقروءة فقط
+    readonly_fields = ("get_total_price_display",)
+
+    # تقسيم الحقول في واجهة التحرير
+    fieldsets = (
+        ("🛍️ بيانات المنتج", {"fields": ("product", "quantity")}),
+        ("💳 بيانات الجلسة", {"fields": ("session_key",)}),
+        ("💰 المجموع الفرعي", {"fields": ("get_total_price_display",)}),
+    )
+
+    def get_total_price_display(self, obj):
+        """عرض المجموع بصيغة مرتبة"""
+        return f"{obj.get_total_price():,.2f} ريال"
+    get_total_price_display.short_description = "المجموع الفرعي"
